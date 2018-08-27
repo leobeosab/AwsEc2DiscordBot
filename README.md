@@ -12,7 +12,8 @@ This is still a large WIP, currently being used to turn a Feed the Beast server 
 2. Setup AWS CLI with ``` aws configure ```
 3. Go to Discord's developer site and setup a bot [here](https://discordapp.com/developers)
 4. Clone this repo into a desired folder
-5. Set the discord token environment variable with the name 'AWSDISCORDTOKEN'
-6. python3 bot.py :)
+5. Change the instance ID in bot.py to your desired instance
+6. Set the discord token environment variable with the name 'AWSDISCORDTOKEN'
+7. python3 bot.py :)
 
 For easy and reliable usage I reccomend using upstart to restart on error and start on system startup
