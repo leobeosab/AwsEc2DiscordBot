@@ -10,7 +10,7 @@ This is still a large WIP, currently being used to turn a Feed the Beast server 
 ## Usage | Installation
 1. Install and setup the required tools above
 2. Setup AWS CLI with ``` aws configure ```
-3. Go to Discord's developer site and setup a bot (here)[https://discordapp.com/developers]
+3. Go to Discord's developer site and setup a bot [here](https://discordapp.com/developers)
 4. Clone this repo into a desired folder
 5. Set the discord token environment variable with the name 'AWSDISCORDTOKEN'
 6. python3 bot.py :)
