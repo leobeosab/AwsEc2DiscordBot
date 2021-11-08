@@ -1,10 +1,8 @@
-import discord, asyncio, os, boto3
+import discord, boto3, config
 
 client = discord.Client()
-
 ec2 = boto3.resource('ec2')
-#Temp
-instance = ec2.Instance('i-06bc2e80c17a5636c')
+instance = ec2.Instance(config.instance_id)
 
 @client.event
 async def on_ready():
@@ -13,31 +11,33 @@ async def on_ready():
     print(client.user.id)
     print('------------')
 
+
 @client.event
 async def on_message(message):
-    memberIDs = (member.id for member in message.mentions)
-    if client.user.id in memberIDs:
-        if 'stop' in message.content:
-            if turnOffInstance():
-                await client.send_message(message.channel, 'AWS Instance stopping')
-            else:
-                await client.send_message(message.channel, 'Error stopping AWS Instance')
-        elif 'start' in message.content:
-            if turnOnInstance():
-                await client.send_message(message.channel, 'AWS Instance starting')
-            else:
-                await client.send_message(message.channel, 'Error starting AWS Instance')
-        elif 'state' in message.content:
-            await client.send_message(message.channel, 'AWS Instance state is: ' + getInstanceState())
-        elif 'reboot' in message.content:
-            if rebootInstance():
-                await client.send_message(message.channel, 'AWS Instance rebooting')
-            else:
-                await client.send_message(message.channel, 'Error rebooting AWS Instance')
+    if message.content.lower() == "stop":
+        if turnOffInstance():
+            await message.channel.send('AWS Instance stopping')
+        else:
+            await message.channel.send('Error stopping AWS Instance')
+    elif message.content.lower() == "start":
+        if turnOnInstance():
+            await message.channel.send('AWS Instance starting')
+        else:
+            await message.channel.send('Error starting AWS Instance')
+    elif message.content.lower() == "state":
+        if getInstanceState():
+            await message.channel.send('AWS Instance state is: ' + getInstanceState())
+    elif message.content.lower() == "reboot":
+        if rebootInstance():
+            await message.channel.send('AWS Instance rebooting')
+        else:
+            await message.channel.send('Error rebooting AWS Instance')
+    elif message.content.lower() == "test":
+        await message.channel.send('Thanks, Jace. Helps alot.')
 
 def turnOffInstance():
     try:
-        instance.stop(False, False)
+        instance.stop()
         return True
     except:
         return False
@@ -50,7 +50,7 @@ def turnOnInstance():
         return False
 
 def getInstanceState():
-    return instance.state['Name']
+        return instance.state['Name']
 
 def rebootInstance():
     try:
@@ -59,5 +59,4 @@ def rebootInstance():
     except:
         return False
 
-
-client.run(os.environ['AWSDISCORDTOKEN'])
+client.run(config.discord_key)
